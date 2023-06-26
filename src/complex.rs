@@ -1,5 +1,6 @@
 pub mod imaginary; // incluse imaginaries nums (b in (a + bi))
 pub mod pif;
+pub mod mond;
 use core::ops::Mul; // include traits of operatior overloading
 use core::ops::Div;
 use core::ops::Sub;
@@ -25,7 +26,7 @@ impl Complex { // functions (metods) for Complex struct
     pub fn to_polar(num :&Complex) -> Polar { // convert Complex to Polar record
             /* i treated a and bi as x1 y1 */
         let _s :f64 = (num.a*num.a + num.b.i*num.b.i).sqrt(); // (hypotenuse size)
-        let _c :f64 = (num.a/_s).asin()*180./PI; // corner 
+        let _c :f64 = (num.b.i/num.a).atan()*180./PI; // corner 
         Polar {s : _s, c : _c} // return Polar record
     }
 
@@ -33,6 +34,12 @@ impl Complex { // functions (metods) for Complex struct
         print!("a: {}, b: {}", 
                  round_down(num.a, 0),
                  round_down(num.b.i, 0));
+    }
+    
+    pub fn pow(&self, n :i32) -> Complex {
+        let mut result :Complex = *self;
+        for _ in 0..n { result = result*result; }
+        result
     }
 }
 
@@ -58,11 +65,24 @@ impl Sub<Complex> for Complex {
     }
 }
 
+impl Mul<Complex> for Complex {
+    type Output = Complex;
+
+    fn mul(self, num :Complex) -> Complex {
+        Complex {
+            a : Polar::to_complex(&(Complex::to_polar(&self)*Complex::to_polar(&num))).a,
+            b : imaginary::Imaginary { 
+                i : Polar::to_complex(&(Complex::to_polar(&self)*Complex::to_polar(&num))).b.i 
+            },
+        }
+    }
+}
+
 #[allow(dead_code)]
 impl Polar { // Polar functions
     pub fn to_complex(num :&Polar) -> Complex { // convert Polar to Complex struct
-        let _a :f64 = num.s*(num.c/180.*PI).sin(); // s is size 
-        let _b :f64 = num.s*((num.c)/180.*PI).cos();       // c is corner
+        let _a :f64 = num.s*((num.c)/180.*PI).cos(); // s is size 
+        let _b :f64 = num.s*((num.c)/180.*PI).sin();       // c is corner
         Complex {a : _a, b : imaginary::Imaginary {i : _b}} // return struct
     }
 
