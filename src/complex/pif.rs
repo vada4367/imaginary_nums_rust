@@ -3,6 +3,7 @@ use crate::complex::Polar;
 use crate::Imaginary;
 use round::round_down;
 
+#[allow(dead_code)]
 pub fn pith_trips(a :i32) -> Vec<Vec<f64>> {
     let mut result :Vec<Vec<f64>> = vec![];
     for i in 1..a {
