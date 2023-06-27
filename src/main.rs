@@ -11,8 +11,8 @@ use std::time::{Duration, Instant};
 const N :i32 = 10;
 
 // Mond const's
-const X :f64 = -0.55050055;
-const Y :f64 = -0.5505;
+const X :f64 = -0.55;
+const Y :f64 = -0.55;
 const A :i32 = 100; // Size a from shape of print
 
 
