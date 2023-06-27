@@ -5,7 +5,6 @@ use core::ops::Mul; // include traits of operatior overloading
 use core::ops::Div;
 use core::ops::Sub;
 use std::ops::Add;
-use round::round_down;
 
 const PI :f64 = std::f64::consts::PI; // Pi const
 
@@ -32,8 +31,8 @@ impl Complex { // functions (metods) for Complex struct
 
     pub fn print(num :&Complex) { // print a and bi function
         print!("a: {}, b: {}", 
-                 round_down(num.a, 0),
-                 round_down(num.b.i, 0));
+                 num.a.round(),
+                 num.b.i.round());
     }
     
     pub fn pow(&self, n :i32) -> Complex {
@@ -87,7 +86,7 @@ impl Polar { // Polar functions
     }
 
     pub fn print(num :&Polar) {
-        println!("s: {}, c: {}", num.s, num.c);    
+        println!("s: {}, c: {}", num.s.round(), num.c.round());    
     }
 }
 

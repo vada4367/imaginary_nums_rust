@@ -38,27 +38,25 @@ fn main() {
     let mut scale :f64 = 0.01; // Scale of coord network
     let mut frame = Instant::now();
 
-    let mut tx :f64;
-    let mut ty :f64;
-
     loop { // loop scale
         if Instant::now() - frame > ten_millis {
             scale /= 1.01;
             
-            tx = termion::terminal_size().unwrap().0 as f64;
-            ty = termion::terminal_size().unwrap().1 as f64;
+            if let Some((tx, ty)) = term_size::dimensions() {
+                let coord :Coord = mond::Coord::init( // coord network
+                    X-tx as f64/2.*scale*2., 
+                    Y-ty as f64/2.*scale*5., 
+                    X+tx as f64/2.*scale*2., 
+                    Y+ty as f64/2.*scale*5.,
+                    tx as i32,
+                    ty as i32);
+                let bool_coord :Vec<Vec<bool>> = coord.mond(); // Which dots is mond
+                print_mond(&bool_coord);
+                
+                frame = Instant::now();
 
-            let coord :Coord = mond::Coord::init( // coord network
-                X-tx/2.*scale*2., 
-                Y-ty/2.*scale*5., 
-                X+tx/2.*scale*2., 
-                Y+ty/2.*scale*5.,
-                tx as i32,
-                ty as i32);
-            let bool_coord :Vec<Vec<bool>> = coord.mond(); // Which dots is mond
-            print_mond(&bool_coord);
-            
-            frame = Instant::now();
+
+            } else {println!("48 string ERROR");break;}
         }
     }
 }

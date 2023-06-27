@@ -1,7 +1,6 @@
 use crate::Complex;
 use crate::complex::Polar;
 use crate::Imaginary;
-use round::round_down;
 
 #[allow(dead_code)]
 pub fn pith_trips(a :i32) -> Vec<Vec<f64>> {
@@ -13,9 +12,9 @@ pub fn pith_trips(a :i32) -> Vec<Vec<f64>> {
             let powered :Complex = 
                 Polar::to_complex(&(complex_polar * complex_polar));
             result.push(vec![
-                        round_down(powered.a, 0), 
-                        round_down(powered.b.i, 0), 
-                        round_down(complex_polar.s*complex_polar.s, 0)]);
+                        powered.a.round(), 
+                        powered.b.i.round(), 
+                        complex_polar.s*complex_polar.s.round()]);
         }
     }
     result
