@@ -1,6 +1,6 @@
 pub mod imaginary; // incluse imaginaries nums (b in (a + bi))
-pub mod pif;
-pub mod mond;
+pub mod pyth;
+pub mod mand;
 use core::ops::Mul; // include traits of operatior overloading
 use core::ops::Div;
 use core::ops::Sub;
