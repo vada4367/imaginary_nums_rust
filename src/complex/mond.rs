@@ -7,15 +7,22 @@ pub struct Coord {
 
 #[allow(dead_code)]
 impl Coord {
-    pub fn init(x1 :f64, y1 :f64, x2 :f64, y2 :f64, n :i32) -> Coord {
+    pub fn init(
+        x1 :f64, 
+        y1 :f64, 
+        x2 :f64, 
+        y2 :f64, 
+        term_x :i32, 
+        term_y :i32) -> Coord {
+
         let mut result :Vec<Vec<Complex>> = vec![];
 
-        for i in 0..n {
+        for i in 0..term_x {
             let mut str :Vec<Complex> = vec![];
-            for j in 0..n {
+            for j in 0..term_y {
                 str.push(Complex { 
-                    a : x1 + (x2-x1)/(n as f64) * (i as f64), 
-                    b : Imaginary {i : y1 + (y2-y1)/(n as f64) * (j as f64)}});
+                    a : x1 + (x2-x1)/((term_x) as f64) * (i as f64), 
+                    b : Imaginary {i : y1 + (y2-y1)/((term_y) as f64) * (j as f64)}});
             }
             result.push(str);
         }
