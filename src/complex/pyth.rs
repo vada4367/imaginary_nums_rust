@@ -11,14 +11,15 @@ pub fn pyth_trips(a: i32) -> Vec<Vec<f64>> {
                 a: j as f64,
                 b: Imaginary { i: i as f64 },
             };
-            let complex_polar: Polar = Complex::to_polar(&complex);
 
-            let powered: Complex = Polar::to_complex(&(complex_polar * complex_polar));
+            let powered: Complex = complex * complex;
 
             result.push(vec![
                 powered.a.round() * -1.,
                 powered.b.i.round(),
-                complex_polar.s * complex_polar.s.round(),
+                (complex.a * complex.a + complex.b.i * complex.b.i)
+                    .sqrt()
+                    .round(),
             ]);
         }
     }

@@ -80,11 +80,9 @@ impl Mul<Complex> for Complex {
 
     fn mul(self, num: Complex) -> Complex {
         Complex {
-            a: Polar::to_complex(&(Complex::to_polar(&self) * Complex::to_polar(&num))).a,
+            a: self.a * num.a - self.b.i * num.b.i,
             b: imaginary::Imaginary {
-                i: Polar::to_complex(&(Complex::to_polar(&self) * Complex::to_polar(&num)))
-                    .b
-                    .i,
+                i: self.b.i * num.a + self.a * num.b.i,
             },
         }
     }
@@ -108,6 +106,7 @@ impl Polar {
     }
 }
 
+/*
 impl Mul<Polar> for Polar {
     type Output = Polar;
 
@@ -118,6 +117,7 @@ impl Mul<Polar> for Polar {
         }
     }
 }
+*/
 
 impl Div<Polar> for Polar {
     type Output = Polar;

@@ -33,7 +33,7 @@ impl Coord {
 
         while count <= iters {
             z = z * z + *c;
-            if Complex::to_polar(&z).s > 2. {
+            if z.a*z.a+z.b.i*z.b.i > 4. {
                 break;
             }
             count += 1;
