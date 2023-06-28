@@ -1,4 +1,3 @@
-use crate::complex::Polar;
 use crate::Complex;
 use crate::Imaginary;
 
