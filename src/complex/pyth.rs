@@ -15,11 +15,11 @@ pub fn pyth_trips(a: i32) -> Vec<Vec<f64>> {
             let powered: Complex = complex * complex;
 
             result.push(vec![
-                powered.a.round() * -1.,
-                powered.b.i.round(),
-                (complex.a * complex.a + complex.b.i * complex.b.i)
+                powered.a.round() * -1., // a
+                powered.b.i.round(), // b
+                (powered.a * powered.a + powered.b.i * powered.b.i)
                     .sqrt()
-                    .round(),
+                    .round(), // c
             ]);
         }
     }

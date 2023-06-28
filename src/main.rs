@@ -37,7 +37,7 @@ fn main() {
         use crate::complex::mand;
         use std::time::{Duration, Instant};
 
-        let ten_millis = Duration::from_millis(30); // Frame
+        let ten_millis = Duration::from_millis(30); // Frame time
 
         let mut scale: f64 = 0.05; // Scale of coord network
         let mut frame = Instant::now();
