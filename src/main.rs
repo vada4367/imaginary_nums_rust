@@ -12,7 +12,6 @@ const X: f64 = -0.5505;
 const Y: f64 = -0.53875;
 const C: char = '␁'; // Color
 
-
 fn main() {
     if U == 0 {
         use crate::complex::pyth;

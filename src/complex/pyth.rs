@@ -14,7 +14,7 @@ pub fn pyth_trips(a: i32) -> Vec<Vec<f64>> {
             let powered: Complex = complex * complex;
 
             result.push(vec![
-                powered.a.round(), // a
+                powered.a.round(),   // a
                 powered.b.i.round(), // b
                 (powered.a * powered.a + powered.b.i * powered.b.i)
                     .sqrt()

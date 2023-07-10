@@ -33,7 +33,7 @@ impl Coord {
 
         while count <= iters {
             z = z * z + *c;
-            if z.a*z.a+z.b.i*z.b.i > 4. {
+            if z.a * z.a + z.b.i * z.b.i > 4. {
                 break;
             }
             count += 1;
@@ -57,8 +57,7 @@ impl Coord {
     }
 }
 
-
-pub fn print_mand(bool_coord: &Vec<Vec<bool>>, c :char) {
+pub fn print_mand(bool_coord: &Vec<Vec<bool>>, c: char) {
     print!("\x1B[2J\x1B[1;1H"); // clear terminal
 
     for j in 0..bool_coord[0].len() - 1 {
@@ -72,4 +71,3 @@ pub fn print_mand(bool_coord: &Vec<Vec<bool>>, c :char) {
         println!();
     }
 }
-
