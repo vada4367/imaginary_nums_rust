@@ -26,7 +26,7 @@ impl Coord {
         Coord { matrix: result }
     }
 
-    fn dot_mond(c: &Complex) -> bool {
+    fn dot_mand(c: &Complex) -> bool {
         let mut z: Complex = *c;
         let iters: i32 = 100;
         let mut count: i32 = 0;
@@ -40,16 +40,15 @@ impl Coord {
         }
 
         count >= iters - 2
-        //Complex::to_polar(&z).s < Complex::to_polar(c).s
     }
 
-    pub fn mond(&self) -> Vec<Vec<bool>> {
+    pub fn mand(&self) -> Vec<Vec<bool>> {
         let mut result: Vec<Vec<bool>> = vec![];
 
         for i in 0..self.matrix.len() {
             let mut str: Vec<bool> = vec![];
             for j in 0..self.matrix[0].len() - 1 {
-                str.push(Self::dot_mond(&self.matrix[i][j]));
+                str.push(Self::dot_mand(&self.matrix[i][j]));
             }
             result.push(str);
         }
@@ -57,3 +56,20 @@ impl Coord {
         result
     }
 }
+
+
+pub fn print_mand(bool_coord: &Vec<Vec<bool>>, c :char) {
+    print!("\x1B[2J\x1B[1;1H"); // clear terminal
+
+    for j in 0..bool_coord[0].len() - 1 {
+        for i in 0..bool_coord.len() {
+            if bool_coord[i][j] {
+                print!("{}", c);
+            } else {
+                print!(" ");
+            }
+        }
+        println!();
+    }
+}
+

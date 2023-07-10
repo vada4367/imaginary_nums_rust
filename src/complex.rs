@@ -1,4 +1,4 @@
-pub mod imaginary; // incluse imaginaries nums (b in (a + bi))
+pub mod imaginary; // include imaginaries nums (b in (a + bi))
 pub mod mand;
 pub mod pyth;
 use core::ops::Div;
