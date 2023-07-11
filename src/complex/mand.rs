@@ -42,15 +42,63 @@ impl Coord {
         count >= iters - 2
     }
 
-    pub fn mand(&self) -> Vec<Vec<bool>> {
+    async fn part_mand(&self, (x1, x2) :(i32, i32)) -> Vec<Vec<bool>> {
         let mut result: Vec<Vec<bool>> = vec![];
 
-        for i in 0..self.matrix.len() {
+        for i in x1..x2 {
             let mut str: Vec<bool> = vec![];
             for j in 0..self.matrix[0].len() - 1 {
-                str.push(Self::dot_mand(&self.matrix[i][j]));
+                str.push(
+                    Self::dot_mand(
+                        &self.matrix[i as usize][j as usize]));
             }
             result.push(str);
+        }
+
+        result
+    }
+
+    pub async fn handle_mand(
+            &self,
+            handles :i32, 
+            i :i32) -> Vec<Vec<bool>> {
+
+        let (x1, x2) :(i32, i32) = (
+            (self.matrix.len() as i32/handles*i),
+            self.matrix.len() as i32/handles*(i+1));
+
+        let part :Vec<Vec<bool>> = Self::part_mand(
+            self,
+            (x1,
+            x2)
+            ).await;
+
+        part
+    }
+
+    pub async fn mand(&self, handles :i32) -> Vec<Vec<bool>> {
+        let mut result :Vec<Vec<bool>> = vec![];
+
+        for i in 0..self.matrix.len() {
+            result.push(vec![]);
+            for _ in 0..self.matrix[0].len() {
+                result[i].push(false);
+            }
+        }
+
+        for i in 0..handles {
+            let part = self.handle_mand(handles, i).await;
+
+            let (x1, x2) :(i32, i32) = (
+                (self.matrix.len() as i32/handles*i),
+                self.matrix.len() as i32/handles*(i+1));
+
+            for i in x1..x2 {
+                for j in 0..self.matrix[0].len() - 1 {
+                    result[i as usize][j as usize] = 
+                        part[(i-x1) as usize][j];
+                }
+            }
         }
 
         result

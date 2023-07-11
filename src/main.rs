@@ -1,4 +1,4 @@
-const U: i32 = 0; // 0 - pyth trips, 1 - mand.
+const U: i32 = 1; // 0 - pyth trips, 1 - mand.
 
 mod complex;
 use crate::complex::imaginary::Imaginary;
@@ -11,8 +11,10 @@ const N: i32 = 10;
 const X: f64 = -0.5505;
 const Y: f64 = -0.53875;
 const C: char = '␁'; // Color
+const H: i32 = 8; // handles
 
-fn main() {
+#[tokio::main]
+async fn main() {
     if U == 0 {
         use crate::complex::pyth;
         println!("{:#?}", pyth::pyth_trips(N));
@@ -29,7 +31,7 @@ fn main() {
 
         loop {
             // loop scale
-            if Instant::now() - frame > frame_time {
+            //if Instant::now() - frame > frame_time {
                 scale /= 1.01;
 
                 if let Some((tx, ty)) = term_size::dimensions() {
@@ -42,15 +44,16 @@ fn main() {
                         tx as i32,
                         ty as i32,
                     );
-                    let bool_coord: Vec<Vec<bool>> = coord.mand(); // Which dots is mond
-                    mand::print_mand(&bool_coord, C);
+                    let bool_coord: Vec<Vec<bool>> = coord.mand(H).await; // Which dots is mond
+                    //mand::print_mand(&bool_coord, C);
+                    println!("{}", (Instant::now() - frame).as_nanos());
 
                     frame = Instant::now();
                 } else {
                     eprintln!("65 string ERROR");
                     break;
                 }
-            }
+            //}
         }
     }
 }
