@@ -1,15 +1,32 @@
+use std::fmt;
+use std::sync::Arc;
 use crate::Complex;
 use crate::Imaginary;
 
+#[derive(Clone)]
 pub struct Coord {
     pub matrix: Vec<Complex>,
     pub x: i32,
     pub y: i32,
 }
 
+impl fmt::Debug for Coord {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result 
+    {
+        f.debug_struct("Coord")
+            .field("matrix", &self.matrix)
+            .field("x", &self.x)
+            .field("y", &self.y)
+            .finish()
+    }
+}
+
+
 #[allow(dead_code)]
-impl Coord {
-    pub fn init(x1: f64, y1: f64, x2: f64, y2: f64, term_x: i32, term_y: i32) -> Coord {
+impl Coord 
+{
+    pub fn init(x1: f64, y1: f64, x2: f64, y2: f64, term_x: i32, term_y: i32) -> Coord 
+    {
         let mut result: Vec<Complex> = vec![];
 
         for i in 0..term_x * term_y {
@@ -28,13 +45,15 @@ impl Coord {
         }
     }
 
-    fn dot_mand(c: &Complex) -> bool {
-        let mut z: Complex = *c;
+    fn dot_mand(&self, i: usize) -> bool 
+    {
+        let c: Complex = self.matrix[i];
+        let mut z: Complex = c;
         let iters: i32 = 100;
         let mut count: i32 = 0;
 
         while count <= iters {
-            z = z * z + *c;
+            z = z * z + c;
             if z.a * z.a + z.b.i * z.b.i > 4. {
                 break;
             }
@@ -44,28 +63,31 @@ impl Coord {
         count > iters - 1
     }
 
-    async fn part_mand(matrix: Vec<Complex>, (point1, point2): (i32, i32)) -> Vec<bool> {
+    async fn part_mand(&self, point1: i32, point2: i32) -> Vec<bool> 
+    {
         let mut result: Vec<bool> = vec![];
 
         for i in point1..point2 {
-            result.push(Self::dot_mand(&matrix[i as usize]));
+            result.push(self.dot_mand(i as usize));
         }
 
         result
     }
 
-    pub async fn handle_mand(matrix: Vec<Complex>, handles: i32, i: i32) -> Vec<bool> {
+    pub async fn handle_mand(&self, handles: i32, i: i32) -> Vec<bool> 
+    {
         let (point1, point2): (i32, i32) = (
-            (matrix.len() as i32 / handles * i),
-            matrix.len() as i32 / handles * (i + 1),
+            (self.x*self.y as i32 / handles * i),
+             self.x*self.y as i32 / handles * (i + 1),
         );
 
-        let part: Vec<bool> = Self::part_mand(matrix, (point1, point2)).await;
+        let part: Vec<bool> = self.part_mand(point1, point2).await;
 
         part
     }
 
-    pub async fn mand(&self, handles: i32) -> Vec<bool> {
+    pub async fn mand(self, handles: i32) -> Vec<bool> 
+    {
         let mut result: Vec<bool> = vec![];
         for _ in 0..self.x * self.y {
             result.push(false);
@@ -74,17 +96,18 @@ impl Coord {
         let mut program_handles = vec![];
 
         for i in 0..handles {
-            let matrix = self.matrix.clone();
+            let arc_self = Arc::new(self.clone());
 
             let handle = tokio::spawn(async move {
-                let part = Self::handle_mand(matrix.clone(), handles, i).await;
+                let copy_self = Arc::try_unwrap(arc_self).unwrap();
+                let part = copy_self.handle_mand(handles, i).await;
 
                 let (point1, point2): (i32, i32) = (
-                    (matrix.len() as i32 / handles * i),
-                    matrix.len() as i32 / handles * (i + 1),
+                    (copy_self.x*copy_self.y as i32 / handles * i),
+                     copy_self.x*copy_self.y as i32 / handles * (i + 1),
                 );
 
-                return (part, point1, point2);
+                (part, point1, point2)
             });
 
             program_handles.push(handle);
@@ -102,7 +125,8 @@ impl Coord {
     }
 }
 
-pub fn print_mand(bool_coord: &Vec<bool>, c: char, x: i32, y: i32) {
+pub fn print_mand(bool_coord: &Vec<bool>, c: char, x: i32, y: i32) 
+{
     print!("\x1B[2J\x1B[1;1H"); // clear terminal
 
     for i in 0..x * y {

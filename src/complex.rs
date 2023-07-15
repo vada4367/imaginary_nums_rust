@@ -2,36 +2,48 @@ pub mod imaginary; // include imaginaries nums (b in (a + bi))
 pub mod mand;
 pub mod pyth;
 
+use std::fmt;
 use core::ops::{Add, Div, Mul, Sub};
 
-#[derive(Copy, Clone)]
-pub struct Complex {
-    // Complex number (a + bi)
+
+// Complex number (a + bi)
+
+#[derive(Copy, Clone, Debug)]
+pub struct Complex 
+{
     pub a: f64,                  // a part
     pub b: imaginary::Imaginary, // bi part
 }
 
+// Polar complex record
+
 #[derive(Copy, Clone)]
-pub struct Polar {
-    // Polar complex record
+pub struct Polar 
+{
     pub s: f64, // size (hypotenuse)
     pub c: f64, // corner
 }
 
+
 // functions (metods) for Complex struct
+impl fmt::Display for Complex
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "a: {}, b: {})", self.a, self.b.i)
+    }
+}
+
 #[allow(dead_code)]
-impl Complex {
+impl Complex 
+{
     pub fn to_polar(num: &Complex) -> Polar {
-        // convert Complex to Polar record
-        // I treated a and bi as x1 y1
+        /* 
+         * convert Complex Coordinate to Polar record
+         * I treated a and bi as x1 and y1
+         */
         let _s: f64 = (num.a * num.a + num.b.i * num.b.i).sqrt(); // (hypotenuse size)
         let _c: f64 = (num.b.i / num.a).atan().to_degrees(); // corner
         Polar { s: _s, c: _c } // return Polar record
-    }
-
-    pub fn print(num: &Complex) {
-        // print a and bi function
-        print!("a: {}, b: {}", num.a.round(), num.b.i.round());
     }
 
     pub fn pow(&self, n: i32) -> Complex {
@@ -43,8 +55,9 @@ impl Complex {
     }
 }
 
-// ops
-impl Add<Complex> for Complex {
+// ops impls
+impl Add<Complex> for Complex 
+{
     type Output = Complex; // return struct Complex
 
     fn add(self: Complex, num: Complex) -> Complex {
@@ -58,7 +71,8 @@ impl Add<Complex> for Complex {
     }
 }
 
-impl Sub<Complex> for Complex {
+impl Sub<Complex> for Complex 
+{
     type Output = Complex;
 
     fn sub(self: Complex, num: Complex) -> Complex {
@@ -71,7 +85,8 @@ impl Sub<Complex> for Complex {
     }
 }
 
-impl Mul<Complex> for Complex {
+impl Mul<Complex> for Complex 
+{
     type Output = Complex;
 
     fn mul(self, num: Complex) -> Complex {
@@ -84,11 +99,21 @@ impl Mul<Complex> for Complex {
     }
 }
 
+
+// Polar functions
+
+impl fmt::Display for Polar
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "s: {}, c: {})", self.s, self.c)
+    }
+}
+
 #[allow(dead_code)]
-impl Polar {
-    // Polar functions
+impl Polar 
+{
+    // convert Polar to Complex record
     pub fn to_complex(num: &Polar) -> Complex {
-        // convert Polar to Complex struct
         let _a: f64 = num.s * (num.c.to_radians()).cos(); // s is size
         let _b: f64 = num.s * (num.c.to_radians()).sin(); // c is corner
         Complex {
@@ -96,31 +121,14 @@ impl Polar {
             b: imaginary::Imaginary { i: _b },
         } // return struct
     }
-
-    pub fn print(num: &Polar) {
-        println!("s: {}, c: {}", num.s.round(), num.c.round());
-    }
 }
-
-/*
-impl Mul<Polar> for Polar {
-    type Output = Polar;
-
-    fn mul(self, num: Polar) -> Polar {
-        Polar {
-            s: self.s * num.s, /* f*cking magic */
-            c: self.c + num.c,
-        }
-    }
-}
-*/
 
 impl Div<Polar> for Polar {
     type Output = Polar;
 
     fn div(self, num: Polar) -> Polar {
         Polar {
-            s: self.s / num.s, /* f*cking magik */
+            s: self.s / num.s, /* f*cking math magic */
             c: self.c - num.c,
         }
     }
