@@ -2,15 +2,13 @@ pub mod imaginary; // include imaginaries nums (b in (a + bi))
 pub mod mand;
 pub mod pyth;
 
-use std::fmt;
 use core::ops::{Add, Div, Mul, Sub};
-
+use std::fmt;
 
 // Complex number (a + bi)
 
 #[derive(Copy, Clone, Debug)]
-pub struct Complex 
-{
+pub struct Complex {
     pub a: f64,                  // a part
     pub b: imaginary::Imaginary, // bi part
 }
@@ -18,26 +16,22 @@ pub struct Complex
 // Polar complex record
 
 #[derive(Copy, Clone)]
-pub struct Polar 
-{
+pub struct Polar {
     pub s: f64, // size (hypotenuse)
     pub c: f64, // corner
 }
 
-
 // functions (metods) for Complex struct
-impl fmt::Display for Complex
-{
+impl fmt::Display for Complex {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "a: {}, b: {})", self.a, self.b.i)
     }
 }
 
 #[allow(dead_code)]
-impl Complex 
-{
+impl Complex {
     pub fn to_polar(num: &Complex) -> Polar {
-        /* 
+        /*
          * convert Complex Coordinate to Polar record
          * I treated a and bi as x1 and y1
          */
@@ -56,8 +50,7 @@ impl Complex
 }
 
 // ops impls
-impl Add<Complex> for Complex 
-{
+impl Add<Complex> for Complex {
     type Output = Complex; // return struct Complex
 
     fn add(self: Complex, num: Complex) -> Complex {
@@ -71,8 +64,7 @@ impl Add<Complex> for Complex
     }
 }
 
-impl Sub<Complex> for Complex 
-{
+impl Sub<Complex> for Complex {
     type Output = Complex;
 
     fn sub(self: Complex, num: Complex) -> Complex {
@@ -85,8 +77,7 @@ impl Sub<Complex> for Complex
     }
 }
 
-impl Mul<Complex> for Complex 
-{
+impl Mul<Complex> for Complex {
     type Output = Complex;
 
     fn mul(self, num: Complex) -> Complex {
@@ -99,19 +90,16 @@ impl Mul<Complex> for Complex
     }
 }
 
-
 // Polar functions
 
-impl fmt::Display for Polar
-{
+impl fmt::Display for Polar {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "s: {}, c: {})", self.s, self.c)
     }
 }
 
 #[allow(dead_code)]
-impl Polar 
-{
+impl Polar {
     // convert Polar to Complex record
     pub fn to_complex(num: &Polar) -> Complex {
         let _a: f64 = num.s * (num.c.to_radians()).cos(); // s is size

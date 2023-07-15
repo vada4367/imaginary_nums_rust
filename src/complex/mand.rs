@@ -1,7 +1,7 @@
-use std::fmt;
-use std::sync::Arc;
 use crate::Complex;
 use crate::Imaginary;
+use std::fmt;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct Coord {
@@ -11,8 +11,7 @@ pub struct Coord {
 }
 
 impl fmt::Debug for Coord {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result 
-    {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Coord")
             .field("matrix", &self.matrix)
             .field("x", &self.x)
@@ -21,12 +20,9 @@ impl fmt::Debug for Coord {
     }
 }
 
-
 #[allow(dead_code)]
-impl Coord 
-{
-    pub fn init(x1: f64, y1: f64, x2: f64, y2: f64, term_x: i32, term_y: i32) -> Coord 
-    {
+impl Coord {
+    pub fn init(x1: f64, y1: f64, x2: f64, y2: f64, term_x: i32, term_y: i32) -> Coord {
         let mut result: Vec<Complex> = vec![];
 
         for i in 0..term_x * term_y {
@@ -45,8 +41,7 @@ impl Coord
         }
     }
 
-    fn dot_mand(&self, i: usize) -> bool 
-    {
+    fn dot_mand(&self, i: usize) -> bool {
         let c: Complex = self.matrix[i];
         let mut z: Complex = c;
         let iters: i32 = 100;
@@ -63,8 +58,7 @@ impl Coord
         count > iters - 1
     }
 
-    async fn part_mand(&self, point1: i32, point2: i32) -> Vec<bool> 
-    {
+    async fn part_mand(&self, point1: i32, point2: i32) -> Vec<bool> {
         let mut result: Vec<bool> = vec![];
 
         for i in point1..point2 {
@@ -74,11 +68,10 @@ impl Coord
         result
     }
 
-    pub async fn handle_mand(&self, handles: i32, i: i32) -> Vec<bool> 
-    {
+    pub async fn handle_mand(&self, handles: i32, i: i32) -> Vec<bool> {
         let (point1, point2): (i32, i32) = (
-            (self.x*self.y as i32 / handles * i),
-             self.x*self.y as i32 / handles * (i + 1),
+            (self.x * self.y as i32 / handles * i),
+            self.x * self.y as i32 / handles * (i + 1),
         );
 
         let part: Vec<bool> = self.part_mand(point1, point2).await;
@@ -86,8 +79,7 @@ impl Coord
         part
     }
 
-    pub async fn mand(self, handles: i32) -> Vec<bool> 
-    {
+    pub async fn mand(self, handles: i32) -> Vec<bool> {
         let mut result: Vec<bool> = vec![];
         for _ in 0..self.x * self.y {
             result.push(false);
@@ -103,8 +95,8 @@ impl Coord
                 let part = copy_self.handle_mand(handles, i).await;
 
                 let (point1, point2): (i32, i32) = (
-                    (copy_self.x*copy_self.y as i32 / handles * i),
-                     copy_self.x*copy_self.y as i32 / handles * (i + 1),
+                    (copy_self.x * copy_self.y as i32 / handles * i),
+                    copy_self.x * copy_self.y as i32 / handles * (i + 1),
                 );
 
                 (part, point1, point2)
@@ -125,8 +117,7 @@ impl Coord
     }
 }
 
-pub fn print_mand(bool_coord: &Vec<bool>, c: char, x: i32, y: i32) 
-{
+pub fn print_mand(bool_coord: &Vec<bool>, c: char, x: i32, y: i32) {
     print!("\x1B[2J\x1B[1;1H"); // clear terminal
 
     for i in 0..x * y {
