@@ -36,7 +36,7 @@ struct Args {
     y: f64,
 
     #[arg(short, long, default_value_t = 4)]
-    handles: i32,
+    theards: i32,
     #[arg(short, long, default_value_t = '#')]
     color: char,
     #[arg(short, long, default_value_t = 1.05)]
@@ -77,7 +77,7 @@ async fn main() {
                         ty as i32,
                     );
 
-                    let bool_coord: Vec<bool> = coord.clone().mand(args.handles).await; // Which dots is mond
+                    let bool_coord: Vec<bool> = coord.clone().mand(args.theards).await; // Which dots is mond
 
                     mand::print_mand(&bool_coord, args.color, coord.x, coord.y);
 
